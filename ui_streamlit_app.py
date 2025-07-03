@@ -8,7 +8,7 @@ import pandas as pd
 import google.generativeai as genai
 from agent3_executor import run_agent3_and_save_output
 import sys
-
+import io
 # --- Load API Key ---
 # Load Gemini API key from plain text file
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
@@ -72,6 +72,7 @@ if uploaded_file:
 
     # --- Agent 3: Execute ---
     st.subheader("🚀 Output Preview")
+
     output_path = "output.xlsx"
     try:
         result = run_agent3_and_save_output(raw_code, output_path, temp_path, format_classification)
@@ -79,7 +80,19 @@ if uploaded_file:
             st.error(result)
         else:
             st.success("✅ Transformation successful!")
+
+            # Load output file into memory buffer
             with open(output_path, "rb") as f:
-                st.download_button("📥 Download Output Excel", data=f, file_name="pivot_output.xlsx")
+                excel_bytes = f.read()
+            buffer = io.BytesIO(excel_bytes)
+
+            # Serve with correct MIME
+            st.download_button(
+                label="📥 Download Output Excel",
+                data=buffer,
+                file_name="pivot_output.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
+
     except Exception as e:
         st.error(f"❌ Execution Failed: {e}")
