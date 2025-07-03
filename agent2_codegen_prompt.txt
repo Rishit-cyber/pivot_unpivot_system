@@ -19,6 +19,7 @@ General rules:
 - All output must be valid Python code only — no explanations or markdown.
 - Use try/except for error handling and print only error messages as instructed.
 - Do not hardcode any column names such as "user", "activity", "person", etc.
+- All columns (excluding the first entity column) will either be entirely numeric or entirely text — never mixed.
 
 ---
 
@@ -68,13 +69,15 @@ If format_classification == "UNPIVOTED":
 If format_classification == "PIVOTED":
 
 - Assume:
-    - The first column is the `index_col` (e.g., 'Person')
-    - All numeric columns (excluding index_col) are `value_vars`
+    - The first column is the `index_col`
+    - All other columns (after the first) are `value_vars`
+    - The columns are either entirely numeric or entirely text (but not mixed)
 
-- If no numeric columns exist beyond index_col, print:
-      "ERROR: No numeric columns found for unpivoting." and exit.
+- Set:
+    index_col = df.columns[0]
+    value_vars = df.columns[1:]
 
-- Use:
+- Then melt:
     unpivoted_df = pd.melt(df, id_vars=[index_col], value_vars=value_vars, var_name="Variable", value_name="Value")
 
 - Set output:
