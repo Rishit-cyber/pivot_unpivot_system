@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: pivot-unpivot-app
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: streamlit run ui_streamlit_app.py
+    autoDeploy: true
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
