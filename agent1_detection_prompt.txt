@@ -10,6 +10,7 @@ Your task is to analyze the structure of an Excel file and classify it as either
 Assumptions:
 - The user will provide the full path to an Excel file.
 - The file is clean (no missing values or nulls).
+- All columns (excluding the first entity column) will either be entirely numeric or entirely text — never mixed.
 
 Detection Logic:
 
